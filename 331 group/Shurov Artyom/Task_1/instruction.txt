@@ -1,0 +1,20 @@
+1. На сайте https://www.openstreetmap.org
+	найти свой город через поиск
+	скопировать id отношения города
+2. На сайте http://polygons.openstreetmap.fr/
+	вставить id и нажать отправить
+	выбрать poly и скопировать содержимое в файл *.poly
+3. На сайте https://download.geofabrik.de/
+	скачать карту региона, в котором находится город
+4. Установить osmosis https://wiki.openstreetmap.org/wiki/Osmosis
+	с помощью командной строки из папки ....\osmosis\bin (все ранее скачанные файлы в этой папке):
+	osmosis --read-pbf-fast file="файл региона.osm.pbf" --bounding-polygon file="граница региона.poly" --write-xml file="результат.osm"
+	можно заметно сократить размер файла, исключив отношения, которые не имеют тэгов highway=* 
+	osmosis --read-xml исходный.osm --tf accept-ways highway=* --used-node --write-xml результат.osm
+5. Переименовать файл в map.osm и переместить его в папку со скриптом
+6. Запустить скрипт run.py
+7. Результат:
+	mapAL.csv - список смежности
+	mapAM.csv - матрица смежности
+	mapGraph.svg - изображение графа
+Использовался язык python 3 (библиотеки: osmium, csv, svgwrite)
