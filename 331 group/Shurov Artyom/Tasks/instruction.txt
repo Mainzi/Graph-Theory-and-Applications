@@ -1,0 +1,45 @@
+1.
+	a. На сайте https://www.openstreetmap.org
+		найти свой город через поиск
+		скопировать id отношения города
+	b. На сайте http://polygons.openstreetmap.fr/
+		вставить id и нажать отправить
+		выбрать poly и скопировать содержимое в файл *.poly
+	c. На сайте https://download.geofabrik.de/
+		скачать карту региона, в котором находится город
+	d. Установить osmosis https://wiki.openstreetmap.org/wiki/Osmosis
+		с помощью командной строки из папки ....\osmosis\bin (все ранее скачанные файлы в этой папке):
+		osmosis --read-pbf-fast file="файл региона.osm.pbf" --bounding-polygon file="граница региона.poly" --write-xml file="результат.osm"
+		можно заметно сократить размер файла, исключив отношения, которые не имеют тэгов highway=* 
+		osmosis --read-xml исходный.osm --tf accept-ways highway=* --used-node --write-xml результат.osm
+	e. Переименовать файл в map.osm и переместить его в папку со скриптом
+	f. Запустить run.py
+	g. Результат:
+		mapAL.csv - список смежности
+		mapAM.csv - матрица смежности
+		mapGraph.svg - изображение графа
+
+2.
+	Извлечь map.osm из map.rar
+	a. Запустить run.py
+		Необходимо ввести широту и долготу пользователя, путь будет считаться от ближайшего узла дороги к нему
+		Результат: mapGraph.svg - город с путями, map_with_way.csv - кратчайшие пути 
+	b. Результаты сравнений:
+
+		Различные алгоритмы нахождения путей к 10 точкам из 100:
+			Dijkstra time: 15.876858711242676
+			Levit time: 21.46476459503174
+			A_star time: 9.451604127883911
+			Average distance: 13.53206046 km
+			Average time: 20.2981 minutes
+
+		Различные эвристические функции в A*:
+		Расстояние до целей в среднем:
+			Euclidean distance: 13.5321
+			Manhattan distance: 13.7674
+			Chebyshev distance: 13.9727
+		Время работы A* для 100 отправных точек:
+			Euclidean time: 9.76905
+			Manhattan time: 9.45608
+			Chebyshev time: 10.3676
+Использовался язык python 3 (библиотеки: osmium, csv, svgwrite, geopy, heapq) 
